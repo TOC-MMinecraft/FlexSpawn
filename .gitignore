@@ -1,0 +1,7 @@
+/build/
+/.gradle/
+/.gradle-user-home/
+/.spec-workflow/
+/.zcf/
+/config.yml
+/players.yml

@@ -1,0 +1,17 @@
+# 玩家首次加入服务器时的传送位置
+first-join:
+  world: world
+  x: 2760
+  y: 72
+  z: 2453
+  yaw: 0.0
+  pitch: 0.0
+
+# 玩家没有个人存档点时，插件强制使用该位置进行加入或复活传送
+default-respawn:
+  world: world
+  x: 2760
+  y: 72
+  z: 2453
+  yaw: 0.0
+  pitch: 0.0

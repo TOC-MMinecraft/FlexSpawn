@@ -1,0 +1,5 @@
+name: SpawnOnJoin
+version: ${version}
+main: pine.spawnonjoin.SpawnOnJoinPlugin
+api-version: "1.21"
+description: Override join and respawn locations with configurable shared and personal spawn points.
