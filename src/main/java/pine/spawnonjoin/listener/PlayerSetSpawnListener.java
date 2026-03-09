@@ -4,6 +4,7 @@ package pine.spawnonjoin.listener;
 import pine.spawnonjoin.service.SpawnDecisionService;
 import com.destroystokyo.paper.event.player.PlayerSetSpawnEvent;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -24,16 +25,13 @@ public final class PlayerSetSpawnListener implements Listener {
             return;
         }
 
+        Player player = event.getPlayer();
         Location location = event.getLocation();
         if (location == null) {
-            decisionService.clearPersonalSpawn(event.getPlayer().getUniqueId(), event.getPlayer().getName());
+            decisionService.clearPersonalSpawn(player.getUniqueId(), player.getName());
             return;
         }
 
-        decisionService.recordPersonalSpawn(
-                event.getPlayer().getUniqueId(),
-                event.getPlayer().getName(),
-                location
-        );
+        decisionService.recordPersonalSpawnAndNotify(player, location);
     }
 }

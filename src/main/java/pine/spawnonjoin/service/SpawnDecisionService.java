@@ -6,7 +6,9 @@ import pine.spawnonjoin.repository.PlayerSpawnRepository;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Level;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SpawnDecisionService {
@@ -42,6 +44,13 @@ public final class SpawnDecisionService {
 
     public void recordPersonalSpawn(UUID playerId, String playerName, Location location) {
         repository.savePersonalSpawn(playerId, playerName, LocationData.fromLocation(location));
+    }
+
+    public void recordPersonalSpawnAndNotify(Player player, Location location) {
+        recordPersonalSpawn(player.getUniqueId(), player.getName(), location);
+        configService.getSpawnUpdateChatMessage().ifPresent(player::sendMessage);
+        configService.getSpawnUpdateActionBarMessage()
+                .ifPresent(message -> player.sendActionBar(Component.text(message)));
     }
 
     public void clearPersonalSpawn(UUID playerId, String playerName) {
