@@ -1,1 +1,1 @@
-rootProject.name = "SpawnOnJoin"
+rootProject.name = "FlexSpawn"

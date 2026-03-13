@@ -1,4 +1,4 @@
-package pine.spawnonjoin.model;
+package pine.flexspawn.model;
 
 // 用法：统一保存可序列化的位置数据，避免业务层直接依赖 YAML 字段。
 import java.util.Objects;

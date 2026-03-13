@@ -1,8 +1,8 @@
-package pine.spawnonjoin.repository;
+package pine.flexspawn.repository;
 
 // 用法：将玩家 UUID、名称和个人存档点持久化到 players.yml。
-import pine.spawnonjoin.model.LocationData;
-import pine.spawnonjoin.util.LocationSerializer;
+import pine.flexspawn.model.LocationData;
+import pine.flexspawn.util.LocationSerializer;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;

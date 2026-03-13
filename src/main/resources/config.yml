@@ -1,20 +1,24 @@
-# 玩家首次加入服务器时的传送位置
+# 玩家首次加入服务器时使用的专属出生场景
 first-join:
-  world: world
-  x: 2760
-  y: 72
-  z: 2453
-  yaw: 0.0
-  pitch: 0.0
+  enabled: true
+  group: first-join
 
-# 玩家没有个人存档点时，插件强制使用该位置进行加入或复活传送
-default-respawn:
-  world: world
-  x: 2760
-  y: 72
-  z: 2453
-  yaw: 0.0
-  pitch: 0.0
+# 非首次加入且未命中个人存档点时使用的出生场景
+join-default:
+  enabled: true
+  group: join-default
+
+# 玩家因死亡重生且未命中个人存档点时使用的出生场景
+death-respawn:
+  enabled: true
+  group: death-respawn
+
+# 是否接管玩家通过床/重生锚设置的个人存档点
+personal-spawn:
+  enabled: true
+
+# 玩家在公共坐标组内无权限命中且没有 Default 兜底时的提示
+no-permission-message: 你没有权限
 
 # 玩家通过床或重生锚更新个人存档点时的提示消息
 spawn-update-message:

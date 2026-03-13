@@ -1,7 +1,7 @@
-package pine.spawnonjoin.util;
+package pine.flexspawn.util;
 
 // 用法：负责 Bukkit LocationData 与 YAML 结构之间的读写转换。
-import pine.spawnonjoin.model.LocationData;
+import pine.flexspawn.model.LocationData;
 import java.util.Optional;
 import org.bukkit.configuration.ConfigurationSection;
 

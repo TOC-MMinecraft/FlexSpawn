@@ -1,5 +1,5 @@
-name: SpawnOnJoin
+name: FlexSpawn
 version: ${version}
-main: pine.spawnonjoin.SpawnOnJoinPlugin
+main: pine.flexspawn.FlexSpawnPlugin
 api-version: "1.21"
 description: Override join and respawn locations with configurable shared and personal spawn points.

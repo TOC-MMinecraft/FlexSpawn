@@ -6,7 +6,7 @@ plugins {
 
 group = "pine"
 version = "1.0"
-description = "SpawnOnJoin Paper plugin"
+description = "FlexSpawn Paper plugin"
 
 repositories {
     mavenCentral()
@@ -15,6 +15,11 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    testImplementation("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    testImplementation(platform("org.junit:junit-bom:5.10.2"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.mockito:mockito-core:5.12.0")
 }
 
 java {
@@ -31,4 +36,8 @@ tasks.processResources {
     filesMatching("plugin.yml") {
         expand("version" to project.version)
     }
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
