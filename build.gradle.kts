@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "pine"
-version = "1.5"
+version = "2.0"
 description = "FlexSpawn Paper plugin"
 
 repositories {
