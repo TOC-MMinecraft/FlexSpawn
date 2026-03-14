@@ -1,6 +1,6 @@
 # FlexSpawn
 
-`FlexSpawn` 是一个的出生与重生点控制插件。
+`FlexSpawn` 是一个可配置的出生与重生点控制插件。
 
 它会按场景接管玩家的出生或重生位置，并将玩家档案与可选的个人存档点持久化到 `players.yml`。
 
@@ -15,13 +15,79 @@
 2. 将 JAR 放入服务器 `plugins/` 目录。
 3. 启动服务器一次，生成默认配置文件。
 4. 按需修改 `plugins/FlexSpawn/config.yml` 与 `plugins/FlexSpawn/groups.yml`。
-5. 重启服务器使配置生效。
+5. 重启服务器，或使用 `/fs reload` 热重载 `config.yml` 与 `groups.yml` 使配置生效。
 
 ## 生成的文件
 
 - `plugins/FlexSpawn/config.yml`
 - `plugins/FlexSpawn/groups.yml`
 - `plugins/FlexSpawn/players.yml`
+
+## 命令
+
+主命令：`/flexspawn`
+
+别名：`/fs`
+
+### `/fs reload`
+
+重载 `config.yml` 与 `groups.yml`。
+
+### `/fs tp <group> [coordinate] [playername]`
+
+传送到某个坐标组，或传送到该组下的指定坐标点。
+
+- 不带 `playername` 时，默认传送执行命令的人。
+- 控制台执行时必须提供 `playername`。
+- 当第二个参数既可能是“坐标点名”又可能是“在线玩家名”时，插件会优先按“坐标点名”解释。
+- 当指定 `coordinate` 时，如果同一坐标组内不同权限组存在同名坐标点，命令会拒绝执行并提示名称不唯一。
+
+### `/fs add <group> <permission> <coordinate> [weight]`
+
+向已有的坐标组与权限组追加坐标点：
+
+- 传 `<group> <permission> <coordinate> [weight]`：以执行者当前位置创建坐标点，`weight` 默认为 `1`。
+
+补充规则：
+
+- 创建坐标点时会记录当前世界、坐标、朝向。
+- 只有玩家可以执行“创建坐标点”这一层级，因为需要读取当前位置。
+- 不再支持通过命令创建空坐标组或空权限组，避免写出无法通过插件校验的 `groups.yml`。
+
+### `/fs del <group> [permission] [coordinate]`
+
+按层级删除 `groups.yml` 配置：
+
+- 只传 `<group>`：删除整个坐标组。
+- 传 `<group> <permission>`：删除指定权限组。
+- 传 `<group> <permission> <coordinate>`：删除指定坐标点。
+
+补充规则：
+
+- 如果权限组内只剩最后一个坐标点，不能直接删除该点，需要先删除整个权限组。
+- 如果坐标组内只剩最后一个权限组，不能直接删除该权限组，需要先删除整个坐标组。
+
+## 命令权限
+
+### 管理命令
+
+- `flexspawn.admin`
+  - 允许执行 `/fs reload`
+  - 允许执行 `/fs add ...`
+  - 允许执行 `/fs del ...`
+
+### 传送命令
+
+- `flexspawn.tp`
+  - 全部传送权限总开关，可传送自己或别人到任意组、任意具体坐标点
+- `flexspawn.tp.<group>`
+  - 允许把自己传送到指定坐标组
+- `flexspawn.tp.acc.<group>`
+  - 允许把自己传送到指定坐标组中的具体坐标点
+- `flexspawn.tp.other.<group>`
+  - 允许把别人传送到指定坐标组
+- `flexspawn.tp.other.acc.<group>`
+  - 允许把别人传送到指定坐标组中的具体坐标点
 
 ## 场景行为
 
@@ -192,12 +258,14 @@ Windows：
 
 ```powershell
 gradle build
+gradle test
 ```
 
 macOS / Linux：
 
 ```bash
 gradle build
+gradle test
 ```
 
 构建产物默认位于：

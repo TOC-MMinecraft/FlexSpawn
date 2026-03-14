@@ -1,9 +1,10 @@
 package pine.flexspawn.listener;
 
-// 用法：仅在玩家因死亡重生时覆盖目标点，不干扰末地回城或其他插件的重生流程。
+// 用法：仅在玩家因死亡重生时覆盖目标点，不干扰其他重生流程。
 import pine.flexspawn.model.GroupSpawnSelectionResult;
 import pine.flexspawn.service.SpawnDecisionService;
 import java.util.Optional;
+import java.util.function.Supplier;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -13,11 +14,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class PlayerRespawnListener implements Listener {
 
     private final JavaPlugin plugin;
-    private final SpawnDecisionService decisionService;
+    private final Supplier<SpawnDecisionService> decisionServiceSupplier;
 
-    public PlayerRespawnListener(JavaPlugin plugin, SpawnDecisionService decisionService) {
+    public PlayerRespawnListener(JavaPlugin plugin, Supplier<SpawnDecisionService> decisionServiceSupplier) {
         this.plugin = plugin;
-        this.decisionService = decisionService;
+        this.decisionServiceSupplier = decisionServiceSupplier;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -26,7 +27,7 @@ public final class PlayerRespawnListener implements Listener {
             return;
         }
 
-        Optional<GroupSpawnSelectionResult> result = decisionService.resolveRespawnLocation(event.getPlayer());
+        Optional<GroupSpawnSelectionResult> result = decisionServiceSupplier.get().resolveRespawnLocation(event.getPlayer());
         if (result.isEmpty()) {
             return;
         }

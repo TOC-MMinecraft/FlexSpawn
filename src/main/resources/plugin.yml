@@ -3,3 +3,15 @@ version: ${version}
 main: pine.flexspawn.FlexSpawnPlugin
 api-version: "1.21"
 description: Override join and respawn locations with configurable shared and personal spawn points.
+commands:
+  flexspawn:
+    description: Manage FlexSpawn teleport and group configuration.
+    usage: /<command> <reload|tp|add|del>
+    aliases: [fs]
+permissions:
+  flexspawn.admin:
+    description: Allows managing FlexSpawn configuration.
+    default: op
+  flexspawn.tp:
+    description: Allows teleporting to any FlexSpawn group or coordinate.
+    default: op

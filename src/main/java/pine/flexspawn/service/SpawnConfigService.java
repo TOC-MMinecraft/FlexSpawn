@@ -1,10 +1,9 @@
 package pine.flexspawn.service;
 
 // 用法：读取并校验各出生场景开关、坐标组引用以及个人存档点接管配置。
-import pine.flexspawn.model.GroupSpawnReference;
 import pine.flexspawn.model.ScenarioSpawnConfig;
 import pine.flexspawn.model.SpawnScenario;
-import pine.flexspawn.model.WeightedLocationEntry;
+import pine.flexspawn.model.GroupSpawnReference;
 import pine.flexspawn.util.GroupSpawnConfigReader;
 import java.io.File;
 import java.util.EnumMap;
@@ -64,6 +63,10 @@ public final class SpawnConfigService {
         return plugin.getConfig().getString("no-permission-message", DEFAULT_NO_PERMISSION_MESSAGE);
     }
 
+    public YamlConfiguration getGroupsConfig() {
+        return groupsConfig;
+    }
+
     public ConfigurationSection getRequiredGroupSection(String groupName) {
         ConfigurationSection groupSection = GroupSpawnConfigReader.findChildSectionIgnoreCase(groupsConfig, groupName);
         if (groupSection == null) {
@@ -73,13 +76,7 @@ public final class SpawnConfigService {
     }
 
     public void validate() {
-        validateGroupsFile();
-        for (Map.Entry<SpawnScenario, ScenarioSpawnConfig> entry : scenarioConfigs.entrySet()) {
-            if (!entry.getValue().enabled()) {
-                continue;
-            }
-            validateReference(entry.getKey().configPath(), entry.getValue().requiredReference());
-        }
+        GroupConfigValidator.validate(groupsConfig, plugin.getConfig(), plugin.getServer());
     }
 
     private ScenarioSpawnConfig readScenarioConfig(SpawnScenario scenario) {
@@ -121,43 +118,4 @@ public final class SpawnConfigService {
         return Optional.of(message);
     }
 
-    private void validateGroupsFile() {
-        if (groupsConfig.getKeys(false).isEmpty()) {
-            throw new IllegalStateException("groups.yml 中至少需要定义一个坐标组。");
-        }
-
-        for (String groupName : groupsConfig.getKeys(false)) {
-            ConfigurationSection groupSection = getRequiredGroupSection(groupName);
-            if (groupSection.getKeys(false).isEmpty()) {
-                throw new IllegalStateException("坐标组不能为空: " + groupName);
-            }
-
-            for (String permissionGroup : groupSection.getKeys(false)) {
-                ConfigurationSection permissionSection = groupSection.getConfigurationSection(permissionGroup);
-                if (permissionSection == null) {
-                    throw new IllegalStateException("权限组配置格式错误: " + groupName + "." + permissionGroup);
-                }
-                if (permissionSection.getKeys(false).isEmpty()) {
-                    throw new IllegalStateException("权限组内至少需要一个坐标点: " + groupName + "." + permissionGroup);
-                }
-
-                for (String pointName : permissionSection.getKeys(false)) {
-                    WeightedLocationEntry entry = GroupSpawnConfigReader.readWeightedLocationEntry(
-                            permissionSection,
-                            pointName
-                    );
-                    entry.locationData().toLocation(plugin.getServer());
-                }
-            }
-        }
-    }
-
-    private void validateReference(String path, GroupSpawnReference reference) {
-        ConfigurationSection groupSection = getRequiredGroupSection(reference.group());
-        if (reference.hasPoint() && !GroupSpawnConfigReader.hasPoint(groupSection, reference.point())) {
-            throw new IllegalStateException(
-                    "坐标组中不存在指定坐标点: " + path + " -> " + reference.group() + "." + reference.point()
-            );
-        }
-    }
 }
